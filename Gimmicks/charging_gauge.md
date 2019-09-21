@@ -107,14 +107,6 @@ if (enemy_hitboxID.type == 1) { GAUGE_NAME_CURRENT += 10; }
 if (GAUGE_NAME_CURRENT > GAUGE_NAME_MAX) { GAUGE_NAME_CURRENT = GAUGE_NAME_MAX; }
 ```
 
-### Test
-
-Test
-
-### Test
-Test
-### Test
-Test
 
 
 
