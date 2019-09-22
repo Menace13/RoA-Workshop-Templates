@@ -10,6 +10,7 @@ A repository for .GML code templates as examples for people to use for their own
 - - Gimmicks
 - - - [Charging Gauge](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/charging_gauge.md)
 - - - [Double Jump Turn Around](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/double_jump_turn_around.md)
+- - - [Peach Float](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/peach_float.md)
 
 ## Contributors
 
