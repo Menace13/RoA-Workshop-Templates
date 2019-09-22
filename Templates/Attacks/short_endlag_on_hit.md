@@ -21,8 +21,10 @@ Placeholder       | Example | Description
 
 Text to replace (6 placeholders): `[move_name]`, `[MOVE_NAME]`, `[FINAL_WINDOW]`, `[ENDLAG_ON_WHIFF]`, `[MOVE_NAME]`, `[FINAL_WINDOW]`
 
+**NOTE: If you used a full character as a base, this file already exists, and the following lines probably also already exist, you just have to edit them.**
+
 ```
-// [move_name].gml - this file already exists if you used any full character as a base, and the follow lines probably also already exist, you just have to edit them
+// [move_name].gml
 
 set_window_value(AT_[MOVE_NAME], [FINAL_WINDOW], AG_WINDOW_LENGTH, [ENDLAG_ON_WHIFF]);
 set_window_value(AT_[MOVE_NAME], [FINAL_WINDOW], AG_WINDOW_HAS_WHIFFLAG, 0);
