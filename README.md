@@ -6,6 +6,7 @@ A repository for .GML code templates as examples for people to use for their own
 - Templates
 - - Articles
 - - Attacks
+- - - [Double Up Special (with Orcahop)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/double_up_special.md)
 - - - [Short Endlag on Hit](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/short_endlag_on_hit.md)
 - - Gimmicks
 - - - [Charging Gauge](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/charging_gauge.md)
