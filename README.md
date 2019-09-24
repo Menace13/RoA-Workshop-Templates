@@ -1,5 +1,5 @@
 # RoA-Workshop-Templates
-A repository for .GML code templates as examples for people to use for their own Rivals of Aether Steam Workshop creations.
+A repository for .GML code templates as examples for people to use for their own Rivals of Aether Steam Workshop creations. Request new templates or ask questions about templates on Discord. Pull Requests will usually be accepted as long as they meet quality standards and work properly.
 
 ## Table of Contents
 
@@ -15,4 +15,5 @@ A repository for .GML code templates as examples for people to use for their own
 
 ## Contributors
 
-- Menace13 (Discord: Menace13#1313)
+- [Menace13](https://github.com/Menace13) (Discord: Menace13#1313)
+- [Golden Epsilon](https://github.com/GoldenEpsilon) (Discord: Golden Epsilon#8656)

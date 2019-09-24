@@ -121,7 +121,7 @@ In case you have issues / want to see the values of the affected variables in-ga
 ```
 // debug_draw.gml
 
-draw_debug_text(x,y,"cant_uspecial: " + string(cant_uspecial));
+draw_debug_text(x,y,"used_uspecial: " + string(used_uspecial));
 draw_debug_text(x,y+12,"used_djump: " + string(used_djump));
 draw_debug_text(x,y+24,"djumps: " + string(djumps));
 ```
