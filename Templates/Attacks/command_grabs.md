@@ -21,7 +21,7 @@ It's important to set up this variable, because otherwise it's likely to error f
 //update.gml
 if(grabbedid != noone && grabbedid.state == PS_TUMBLE){
         grabbedid.visible = true; //Feel free to remove this line if the grab does not make the opponent invisible.
-        grabbedid.invincible = true; //Feel free to remove this line if the grab does not make the opponent invincible.
+        grabbedid.invincible = false; //Feel free to remove this line if the grab does not make the opponent invincible.
 	grabbedid = noone;
 }
 if(grabbedid != noone){
