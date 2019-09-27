@@ -19,15 +19,15 @@ It's important to set up this variable, because otherwise it's likely to error f
 
 ```
 //update.gml
-if(grabbedid != noone && grabbedid.state == PS_TUMBLE){
-        grabbedid.visible = true; //Feel free to remove this line if the grab does not make the opponent invisible.
-        grabbedid.invincible = false; //Feel free to remove this line if the grab does not make the opponent invincible.
-	grabbedid = noone;
-}
 if(grabbedid != noone){
-	grabbedid.state = PS_TUMBLE;
-	grabbedid.vsp = 0;
-	grabbedid.grav = 0;
+	grabbedid.ungrab++;
+	if(grabbedid.ungrab == 2){
+		grabbedid.visible = true; //Feel free to remove this line if the grab does not make the opponent invisible.
+		grabbedid.invincible = false; //Feel free to remove this line if the grab does not make the opponent invincible.
+		grabbedid.state = PS_TUMBLE;
+		grabbedid.ungrab = 0;
+		grabbedid = noone;
+	}
 }
 ```
 These are backup checks to make sure that the grabbed player isn't stuck in a grab forever. If the state of the grabbed player isn't constantly set to PS_WRAPPED, it will released the grabbed.
@@ -39,7 +39,7 @@ if (attack == AT_GRAB){
     if (window == GRAB_WINDOW && grabbedid == noone){
         hit_player_obj.grabbed = 1;
         grabbedid = hit_player_obj;
-	grabbedid.y -= 1;
+	grabbedid.ungrab = 0;
     }
 }
 ```
@@ -54,6 +54,7 @@ NOTE: This does not necessarially grab the person closest to the hitbox, you hav
 //attack_update.gml
 if (attack == AT_GRAB && (state == PS_ATTACK_AIR || state == PS_ATTACK_GROUND)){
     if (window == GRAB_WINDOW && grabbedid != noone){
+	grabbedid.ungrab = 0;
         window_timer = 1; //DELETE THIS LINE TO LIMIT HOW LONG THE GRAB IS TO THE WINDOW LENGTH
         grabbedid.invincible = true; //DELETE THIS LINE TO MAKE THE GRABBED PLAYER HITTABLE
         //grabbedid.visible = false; //UNCOMMENT THIS LINE TO MAKE THE GRABBED PLAYER INVISIBLE
