@@ -26,6 +26,8 @@ if(grabbedid != noone && grabbedid.state == PS_TUMBLE){
 }
 if(grabbedid != noone){
 	grabbedid.state = PS_TUMBLE;
+	grabbedid.vsp = 0;
+	grabbedid.grav = 0;
 }
 ```
 These are backup checks to make sure that the grabbed player isn't stuck in a grab forever. If the state of the grabbed player isn't constantly set to PS_WRAPPED, it will released the grabbed.
@@ -37,6 +39,7 @@ if (attack == AT_GRAB){
     if (window == GRAB_WINDOW && grabbedid == noone){
         hit_player_obj.grabbed = 1;
         grabbedid = hit_player_obj;
+	grabbedid.y -= 1;
     }
 }
 ```
