@@ -35,7 +35,6 @@ These are backup checks to make sure that the grabbed player isn't stuck in a gr
 //hit_player.gml
 if (attack == AT_GRAB){
     if (window == GRAB_WINDOW && grabbedid == noone){
-        window_timer = 0;
         hit_player_obj.grabbed = 1;
         grabbedid = hit_player_obj;
     }
