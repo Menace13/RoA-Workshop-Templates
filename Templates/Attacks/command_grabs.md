@@ -63,8 +63,6 @@ if (attack == AT_GRAB && (state == PS_ATTACK_AIR || state == PS_ATTACK_GROUND)){
             grabbedid.x = x;
             grabbedid.y = y;
             grabbedid = noone;
-            window = 3;
-            window_timer = 0;
         }
     }
 }
