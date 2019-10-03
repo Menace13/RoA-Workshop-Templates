@@ -61,7 +61,7 @@ if (attack == AT_GRAB && (state == PS_ATTACK_AIR || state == PS_ATTACK_GROUND)){
         grabbedid.x = x + spr_dir * 70; //SET GRABBED PLAYER X TO BE RELATIVE TO PLAYER X
         grabbedid.y = y; //SET GRABBED PLAYER Y TO BE RELATIVE TO PLAYER Y
         grabbedid.spr_dir = -spr_dir; //TURN THE GRABBED PLAYER TO FACE THE GRABBING PLAYER
-        grabbedid.wrap_time = 1;
+        grabbedid.wrap_time = 6000;
         grabbedid.state = PS_WRAPPED;
         if(special_pressed){ //REPLACE THIS IF CONDITION WITH WHAT YOU WANT TO RELEASE THE GRAB
             grabbedid.state = PS_TUMBLE;
