@@ -61,6 +61,7 @@ if (attack == AT_GRAB && (state == PS_ATTACK_AIR || state == PS_ATTACK_GROUND)){
         grabbedid.x = x + spr_dir * 70; //SET GRABBED PLAYER X TO BE RELATIVE TO PLAYER X
         grabbedid.y = y; //SET GRABBED PLAYER Y TO BE RELATIVE TO PLAYER Y
         grabbedid.spr_dir = -spr_dir; //TURN THE GRABBED PLAYER TO FACE THE GRABBING PLAYER
+        grabbedid.wrap_time = 1;
         grabbedid.state = PS_WRAPPED;
         if(special_pressed){ //REPLACE THIS IF CONDITION WITH WHAT YOU WANT TO RELEASE THE GRAB
             grabbedid.state = PS_TUMBLE;
@@ -72,4 +73,4 @@ if (attack == AT_GRAB && (state == PS_ATTACK_AIR || state == PS_ATTACK_GROUND)){
 }
 ```
 NOTE: AGAIN, REPLACE ALL INSTANCES OF AT_GRAB AND GRAB_WINDOW
-NOTE: This code makes the grab release when special is pressed after the opponent is grabbed. You can change this condition to whatever you want.
+NOTE: This code makes the grab release when special is pressed after the opponent is grabbed. You can change this condition to whatever you want. (the if statement with special_pressed; feel free to remove it as well)
