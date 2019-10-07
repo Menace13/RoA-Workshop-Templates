@@ -8,6 +8,8 @@ A repository for .GML code templates as examples for people to use for their own
 - - Attacks
 - - - [Double Up Special (with Orcahop)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/double_up_special.md)
 - - - [Short Endlag on Hit](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/short_endlag_on_hit.md)
+- - - [Inflict Burn](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_inflict.md)
+- - - [Consume Burn (Zetter Strong)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_consume.md)
 - - Gimmicks
 - - - [Charging Gauge](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/charging_gauge.md)
 - - - [Double Jump Turn Around](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Gimmicks/double_jump_turn_around.md)
@@ -17,3 +19,4 @@ A repository for .GML code templates as examples for people to use for their own
 
 - [Menace13](https://github.com/Menace13) (Discord: Menace13#1313)
 - [Golden Epsilon](https://github.com/GoldenEpsilon) (Discord: Golden Epsilon#8656)
+- [Wishdream](https://github.com/Wishdream) (Discord: Wishdream#2161)
