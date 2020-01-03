@@ -69,7 +69,7 @@ Given these assumptions, it will display the correct frame of the sprite strip d
 
 ## debug_draw.gml
 
-This code is only for testing the character. It will show debug text below your character with your exact current gauge value, yout max gauge value, and whether your current attack used your gauge.
+This code is only for testing the character. It will show debug text below your character with your exact current gauge value, your max gauge value, and whether your current attack used your gauge.
 
 #### Code
 
