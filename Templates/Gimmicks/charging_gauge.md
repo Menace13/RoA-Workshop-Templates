@@ -41,29 +41,31 @@ Variable             | Description
 
 ## draw_hud.gml
 
-This code allows you to show your gauge visually in the HUD, in the exact same way Elliana's heat gauge is shown in the HUD. You will need to make a sprite strip similar to the one below for this code to work:
+This code allows you to show your gauge visually in the HUD, in the exact same way Elliana's heat gauge is shown in the HUD. You will need to make empty and full gauge sprites similar to those below for this code to work:
 
 #### Example: gauge_strip11.png
 
-![Image of an example gauge sprite strip](https://raw.githubusercontent.com/Menace13/RoA-Workshop-Templates/master/images/gauge_strip11.png)
+![Image of an example empty gauge sprite strip](https://raw.githubusercontent.com/Menace13/RoA-Workshop-Templates/master/images/gauge_empty.png)
+![Image of an example full gauge sprite strip](https://raw.githubusercontent.com/Menace13/RoA-Workshop-Templates/master/images/gauge_full.png)
 
 #### Code
 
 ```
 // draw_hud.gml
 
-draw_sprite(sprite_get("gauge"), floor(GAUGE_NAME_CURRENT/10), temp_x + 24, temp_y + 6);
+var gauge_full = sprite_get("gauge_full");
+var gauge_height = sprite_get_height(gauge_full);
+var gauge_width = sprite_get_width(gauge_full);
+
+var meter_percentage = GAUGE_NAME_CURRENT / GAUGE_NAME_MAX;
+
+draw_sprite(sprite_get("gauge_empty"),0, temp_x + 24, temp_y + 6);
+draw_sprite_part(gauge_full,0, 0, gauge_height * (1 - meter_percentage), gauge_width, gauge_height * meter_percentage, temp_x + 26, temp_y + 8);
 ```
 
 #### Details
 
-This specific example makes a lot of assumptions:
-- The gauge is in a file named `gauge_stripNUM.png`, where `NUM` is the number of frames in the strip
-- Each frame of the gauge is 10 pixels wide and 36 pixels tall
-- The gauge sprite contains `GAUGE_NAME_MAX / 10 + 1` frames, ranging from empty to full
-  - For example, if `GAUGE_NAME_MAX = 100`, then the file should be `gauge_strip11.png`
-  
-Given these assumptions, it will display the correct frame of the sprite strip depending on the value of `GAUGE_NAME_CURRENT`. For the example of a gauge ranging from 0 to 100 with 11 sprite frames, it will show the first sprite frame if the gauge is between 0 and 9, the second sprite frame if the gauge is between 10 and 19, ..., and the final sprite frame if the gauge is exactly 100.
+This example works by drawing the empty background for the gauge, and then drawing a portion of the full meter on top of it. The code starts by getting the size of the full sprite in pixels. To set the height of the meter, the value `gauge_height * (1 - meter_percentage)` is used for the top of the sprite, which will place it at the top of the sprite when full, and the bottom when empty. Conversely, the height uses the value `gauge_height * meter_percentage`, which will make the height scale from 0 to full height as the meter charges. The code uses 0 and `sprite_width` for the left and width, since it should always draw the full width of the sprite. Because the empty gauge has a border size of 2 pixels, the full gauge is offset by 2 pixels in the x and y position. 
 
 **NOTE:** This location is the same location as Elliana's meter. **You may need to change your `hud.png` and `hurt.png` so the meter does not cover your character's face in the HUD.** Most likely you will only need to shift your art to the right by about 6-8 pixels.
 
