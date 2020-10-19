@@ -16,8 +16,9 @@ In case this attack 'trades' with an opponent, is is recommended to give this at
  
   ```GML
 //attacks/nspecial.gml
-//a minimal 'grab' attack example with a single hitbox. You can copy-paste this into your project to quickly test this template.
-//grab attack example
+//a minimal 'grab' attack example with a single hitbox. 
+//You can copy-paste this into your project to quickly test this template.
+
 set_attack_value(AT_NSPECIAL, AG_CATEGORY, 2);
 set_attack_value(AT_NSPECIAL, AG_SPRITE, sprite_get("nspecial"));
 set_attack_value(AT_NSPECIAL, AG_HURTBOX_SPRITE, sprite_get("nspecial_hurt"));
@@ -67,7 +68,9 @@ Your 'Throw' animation should start at the point where the 'Grab' hits the oppon
  
   ```GML
 //attacks/nspecial_2.gml
-//a minimal 'throw' attack example with a single hitbox. You can copy-paste this into your project to quickly test this template.
+//a minimal 'throw' attack example with a single hitbox. 
+//You can copy-paste this into your project to quickly test this template.
+
 set_attack_value(AT_NSPECIAL_2, AG_CATEGORY, 2);
 set_attack_value(AT_NSPECIAL_2, AG_SPRITE, sprite_get("nspecial"));
 set_attack_value(AT_NSPECIAL_2, AG_HURTBOX_SPRITE, sprite_get("nspecial_hurt"));
@@ -119,22 +122,24 @@ grabbed_player_obj = noone;    //the player object currently being grabbed.
 grabbed_player_relative_x = 0; //the relative x and y position of the grabbed player, at the point they were grabbed.
 grabbed_player_relative_y = 0;   //we store this coordinate to smoothly reposition the grabbed player later.
 ```
+
 ## `hit_player.gml` - 'Grab' Opponents On Hit, Transition to 'Throw'
 ```GML
 //hit_player.gml
 if (my_hitboxID.attack == AT_NSPECIAL) {
-  //Before grabbing the opponent, first make sure that:
-  //-The player is in an attack animation
-  //-The opponent is in hitstun
-  //-The player did not get parried, and
-  //-The opponent is not a Forsburn clone.
+	
+	//Before grabbing the opponent, first make sure that:
+	//-The player is in an attack animation
+	//-The opponent is in hitstun
+	//-The player did not get parried, and
+	//-The opponent is not a Forsburn clone.
 
 	if ((state == PS_ATTACK_GROUND || state == PS_ATTACK_AIR)
 	  && (hit_player_obj.state == PS_HITSTUN || hit_player_obj.state == PS_HITSTUN_LAND)
-    && was_parried == false
+    	  && was_parried == false
 	  && hit_player_obj.clone == false) {
 		
-		//All looks good; transition to the 'throw' part of the attack.
+		//transition to the 'throw' part of the attack.
 		attack_end();
 		set_attack(AT_NSPECIAL_2);
 		
