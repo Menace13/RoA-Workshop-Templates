@@ -6,7 +6,8 @@ A repository for .GML code templates as examples for people to use for their own
 - Templates
 - - Articles
 - - Attacks
-- - - [Command Grabs](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs.md)
+- - - [Command Grabs](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs_2.0.md)
+- - - [Command Grabs (Legacy)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs.md)
 - - - [Consume Burn (Zetter Strong)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_consume.md)
 - - - [Double Up Special (with Orcahop)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/double_up_special.md)
 - - - [Inflict Burn](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_inflict.md)
@@ -23,3 +24,4 @@ A repository for .GML code templates as examples for people to use for their own
 - [Menace13](https://github.com/Menace13) (Discord: Menace13#1313)
 - [Golden Epsilon](https://github.com/GoldenEpsilon) (Discord: Golden Epsilon#8656)
 - [Wishdream](https://github.com/Wishdream) (Discord: Wishdream#2161)
+- [Mawral](https://github.com/Mawral) (Discord: Mawral#4701)
