@@ -35,7 +35,7 @@ These are backup checks to make sure that the grabbed player isn't stuck in a gr
 ## Command Grab usage
 ```
 //hit_player.gml
-if (attack == AT_GRAB){
+if (attack == AT_GRAB && hit_player_obj.state_cat == SC_HITSTUN) {
     if (window == GRAB_WINDOW && grabbedid == noone){
         hit_player_obj.grabbed = 1;
         grabbedid = hit_player_obj;
