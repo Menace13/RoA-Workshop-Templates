@@ -1,4 +1,4 @@
-# Stage Compliant Teleportation Template
+# True Teleportation Template
 ### Created by Deor
 
 ## Description
@@ -53,11 +53,9 @@ if(attack == AT_USPECIAL) {
     
     //Startup Logic
     if(window == 1) {
-        //Check to see if the window is at its end.
-        if(window_timer == get_window_value(attack, window, AG_WINDOW_LENGTH)) {
+        if(window_timer == get_window_value(attack, window, AG_WINDOW_LENGTH)) {    //Check to see if the window is at its end.
             var tp_angle = 0;   //The angle at which the teleport will go.
-            //Set the angle to the direction held on the joystick if a direction is being held.
-            if(!joy_pad_idle) {
+            if(!joy_pad_idle) { //Set the angle to the direction held on the joystick if a direction is being held.
                 tp_angle = joy_dir;
             }
         
@@ -71,12 +69,9 @@ if(attack == AT_USPECIAL) {
     
     //Teleportation Logic
     if(window == 2) {
-        //Teleport during the first frame of the active window.
-        if(window_timer == 1) {
-            //Check to see if destination is colliding with the stage.
-            if(place_meeting(x_, y_, asset_get("par_block"))) {
-                //Use alternate collision function to determine the new teleportation destination.
-                var tp_dest = stage_collide_alt(x, y, x_, y_, tp_prec);
+        if(window_timer == 1) { //Teleport during the first frame of the active window.
+            if(place_meeting(x_, y_, asset_get("par_block"))) { //Check to see if destination is colliding with the stage.
+                var tp_dest = stage_collide_alt(x, y, x_, y_, tp_prec); //Use alternate collision function to determine the new teleportation destination.
                 x_ = tp_dest[0];
                 y_ = tp_dest[1];
             }
@@ -93,8 +88,8 @@ if(attack == AT_USPECIAL) {
 //Alternate stage collide function. This must go at the end of attack_update.
 #define stage_collide_alt {
     ///stage_collide_alt(x1, y1, x2, y2, prec)
-    //This recursive script checks from (x1, y1) to (x2, y2) for the location of the x or y
-    //coordinate of the edge of the stage along that line.
+    //This recursive script checks from (x1, y1) to (x2, y2) for the location of coordinates
+    //of the edge of the stage along that line, returning it as an array formated: [x, y].
     //
     //This script assumes that there is a collision at (x2,y2) and would need to be modified
     //if this is not assumed in order to function properly.
