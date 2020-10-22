@@ -42,6 +42,7 @@ set_window_value(AT_USPECIAL, 3, AG_WINDOW_ANIM_FRAME_START, 2);
 //init.gml
 tp_dist = 100;  //Distance the teleport will travel.
 tp_prec = 8 //The precision of the teleportation algorithm. Larger number will be more accurate, but slower to calculate. 8 is a good balance of speed and precision.
+tp_prec = 8; //The precision of the teleportation algorithm. Larger number will be more accurate, but slower to calculate. 8 is a good balance of speed and precision.
 ```
 ## `attack_update.gml` — Teleport the Character
 ```GML
