@@ -1,3 +1,5 @@
+_(This is a legacy template - consider using the most up-to-date Command Grabs template [here](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs_2.0.md).)_
+
 # COMMAND GRABS
 
 ## Contents
