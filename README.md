@@ -6,6 +6,7 @@ A repository for .GML code templates as examples for people to use for their own
 - Templates
 - - Articles
 - - Attacks
+- - - [Charge Attacks](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/charge_attacks.md)
 - - - [Command Grabs](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs_2.0.md)
 - - - [Command Grabs (Legacy)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/command_grabs.md)
 - - - [Consume Burn (Zetter Strong)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_consume.md)
