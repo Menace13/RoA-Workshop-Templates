@@ -181,6 +181,7 @@ if (attack == AT_NSPECIAL && !hitpause) {
 			//if you don't need an additional attack, you can remove this section.
 			if (charge_timer >= 60) {
 				attack_end();
+				destroy_hitboxes();
 				set_attack(AT_NSPECIAL_2);
 			}
       
