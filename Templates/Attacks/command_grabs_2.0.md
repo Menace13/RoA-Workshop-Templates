@@ -140,6 +140,7 @@ if (my_hitboxID.attack == AT_NSPECIAL) {
 	  && hit_player_obj.clone == false) {
 		
 		//transition to the 'throw' part of the attack.
+		destroy_hitboxes();
 		attack_end();
 		set_attack(AT_NSPECIAL_2);
 		
