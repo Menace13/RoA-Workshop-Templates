@@ -1,6 +1,6 @@
-# Multi-Hit Projectile Template (WIP - In Testing)
+# Multi-Hit Projectile Template (WIP)
 ### Created by Mawral
-
+*Currently in testing. Not recommended for use in your released characters just yet.
 # Description
 
 This template can be used to create a projectile that hits opponents multiple times.
@@ -12,7 +12,7 @@ In this example, `AT_NSPECIAL` is used for the projectile attack, but it can be 
 
 If you just want a template to copy and paste, look no further.
 
-  <details>
+<details>
   <summary>Example 'Multihit Projectile' example attack - nspecial.gml</summary>
  
   ```GML
@@ -173,7 +173,6 @@ If desired, this template supports having a second hitbox spawn after the multi-
 
 Add a second projectile hitbox to your attack. Then, have your first hitbox refer to it using the custom grid index `HG_MULTIHIT_FINAL_HITBOX_NUM`.
 You can also have a Visual Effect spawn at the same time as the 'final' hitbox. Specify it using `HG_MULTIHIT_FINAL_HITBOX_EFFECT` if desired.
-
 ```GML
 //attacks/nspecial.gml
 //for example
@@ -185,57 +184,28 @@ For the sake of being a versatile template, there are three more Grid Indexes th
 
 `HG_MULTIHIT_MAGNET_STRENGTH` defines how much the opponent should 'stick' to the projectile. The value ranges between 0 and 1. Increase this value if the projectile's hits don't connect well into each other. Decrease it if the attack looks choppy and unnatural.
 `HG_MULTIHIT_PERSISTENT`, if set to `true`, will prevent the projectile from disappearing if the opponent escapes some hits of the attack. This is useful for 'crowd control' style projectiles that linger on-screen for a long period of time.
-
+Finally, `HG_MULTIHIT_CAP_SPEED_ON_HIT` will cap the projectile's speed to a given value when it hits a target. This can be used to further help the multi-hits connect together, especially in cases where it would be sped up by Ori's Down-Special or other effects.
+```GML
+//attacks/nspecial.gml
 //for example
-</details>
-
-
-
-
-
-
-This template makes use of some 'custom' grid indexes to simplify editing the projectile. The functions of the custom grid indexes are explained below.
-<details>
-  <summary>Custom Grid Indexes</summary>
-`HG_MULTIHIT_COUNT`
-the total number of times this projectile should hit. set to zero for a projectile that hits repeatedly until its lifetime ends.
-
-`HG_MULTIHIT_DELAY`
-the duration, in frames, between each hit of this projectile, *not* including hitpause. 
-
-`HG_MULTIHIT_MAGNET` (optional)
-Sets the amount that the projectile will 'vacuum' the opponent towards its center. 0 = no vacuum, 1 = instant teleport. A decimal value is recommended.
-
-`HG_MULTIHIT_FINAL_HITBOX_NUM` (optional)
-After this hitbox has dealt the maximum number of hits, you can specify a 'final' hitbox to spawn at the end. Set to 0 to not spawn a 'final' hitbox.
-if HG_MULTIHIT_COUNT equals 0, the final hitbox will spawn at the end of its lifetime.
-
-`HG_MULTIHIT_FINAL_HITBOX_EFFECT` (optional)
-You can specify a visual effect to spawn along with the final hitbox.
-
-`HG_MULTIHIT_PERSISTENT` (optional)
-set this to 'true' to allow the multi-hit projectile to stagger its hits, instead of triggering all its multihits immediately after the first contact. 
-This is recommended for 'crowd control' style projeectiles that linger on the stage.
-for more typical multihits (e.g. Ness's PK Fire, Sylvanos's flower projectile), leave this unset (or set it to false). 
-
-`HG_MULTIHIT_CAP_SPEED_ON_HIT` (optional)
-If HG_MULTIHIT_COUNT is set to zero, the projectile will be 'persistent' by default.
-some parry effects, or abilities like Ori's Bash, can make the projectile move too fast for the multihits to connect.
-you can optionally use this index to cap the projectile's speed on hit.
+set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25);
+```
 
 </details>
+
 
 
 # Scripts
- 
-
 
 ## `hitbox_init.gml` - 'Initialize Multi-Hit Variables'
+Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example. If the character has several multi-hit projectiles, just copy the line of code for each attack index.
+Functions using the `#define` keyword must be placed at the bottom of the .gml file.
+
+<details>
+  <summary>hitbox_init.gml</summary>
+	
 ```GML
 //hitbox_init.gml
-//edit the attack index (AT_NSPECIAL) if necessary. If the character has several multi-hit projectiles, just copy this line of code for each of them.
-if (attack == AT_NSPECIAL && hbox_num == 1) multihit_update_script();
-//if the character has several multi-hit projectiles, just copy this line of code for each of them.
 if (attack == AT_NSPECIAL && hbox_num == 1) multihit_init_script();
 
 
@@ -287,13 +257,19 @@ proj_old_player = player;
 //save a clone of the 'can_hit' array. the update script uses this to detect when a hit has been registered, and resets it to enable the projectile to hit again. 
 initial_can_hit = array_clone(can_hit); 
 return;
-
 ```
+	
+</details>
+
 
 ## `hitbox_update.gml` - Multi-Hit Logic
+Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example.
+
+<details>
+  <summary> hitbox_update.gml </summary>
+	
 ```GML
 //hitbox_update.gml
-//edit the attack index (AT_NSPECIAL) if necessary. If the character has several multi-hit projectiles, just copy this line of code for each of them.
 if (attack == AT_NSPECIAL && hbox_num == 1) multihit_update_script();
 
 #define multihit_update_script
@@ -397,31 +373,42 @@ if (!array_equals(initial_can_hit, can_hit) || (maximum_number_of_hits == 0 && h
 }
 ```
 
+</details>
+
 ## `hit_player.gml` - 'Magnet' Code and Visual Fixes
-Optional, but recommended.
+Optional, but recommended. Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example.
+
+<details>
+  <summary> hit_player.gml </summary>
+	
 ```GML
-//hit_player.gml
-if (my_hitboxID.attack == AT_NSPECIAL && my_hitboxID.hbox_num == 1 && my_hitboxID.hit_priority != 1) {
-	
-if (hit_player_obj.state_cat == SC_HITSTUN) {
-    //magnet the opponent into the multihit projectile.
-    var x_dest = (my_hitboxID.x + 0.5 * my_hitboxID.hsp);
-	hit_player_obj.x += round((x_dest - hit_player_obj.x) * my_hitboxID.proj_magnet_strength);
-	
-	//magnet along the y axis too if the opponent is not flinching.
-	var land_state = hit_player_obj.state == PS_HITSTUN_LAND;
-	if (!land_state) {
-	    var y_dest = my_hitboxID.y + round(0.5 * (my_hitboxID.vsp + hit_player_obj.char_height));
-	    hit_player_obj.y += round((y_dest - hit_player_obj.y) * my_hitboxID.proj_magnet_strength);
-	}
-	
-	//if the hitbox has an angle flipper, prevent the opponent from rapidly flipping direction.
-	if (land_state || hit_player_obj.hurt_img <= 1) {
-	    if (my_hitboxID.hit_flipper == 9 || (my_hitboxID.hit_flipper == 7 && my_hitboxID.kb_angle ^ 180 != 90)) {
-	        hit_player_obj.spr_dir = -my_hitboxID.spr_dir;
-	    }
-	}
+if (my_hitboxID.attack == AT_NSPECIAL && my_hitboxID.hbox_num == 1) multihit_hit_player();
+
+
+#define multihit_hit_player
+
+//ignore kragg shards.
+if (my_hitboxID.hit_priority == 1) return;
+//ignore if the opponent is not stunned.
+if (hit_player_obj.state_cat != SC_HITSTUN) return;
+
+//magnet the opponent into the multihit projectile.
+var x_dest = (my_hitboxID.x + 0.5 * my_hitboxID.hsp);
+hit_player_obj.x += round((x_dest - hit_player_obj.x) * my_hitboxID.proj_magnet_strength);
+
+//magnet along the y axis too if the opponent is not flinching.
+var land_state = hit_player_obj.state == PS_HITSTUN_LAND;
+if (!land_state) {
+    var y_dest = my_hitboxID.y + round(0.5 * (my_hitboxID.vsp + hit_player_obj.char_height));
+    hit_player_obj.y += round((y_dest - hit_player_obj.y) * my_hitboxID.proj_magnet_strength);
+    
+    //if the hitbox has an angle flipper, prevent the opponent from rapidly flipping direction.
+    if hit_player_obj.hurt_img > 1 return;
 }
+
+if (my_hitboxID.hit_flipper == 9 || (my_hitboxID.hit_flipper == 7 && my_hitboxID.kb_angle ^ 180 != 90)) {
+    hit_player_obj.spr_dir = -my_hitboxID.spr_dir;
 }
+return;
 ```
-```
+</details>
