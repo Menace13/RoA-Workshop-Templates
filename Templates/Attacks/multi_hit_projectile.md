@@ -1,6 +1,6 @@
 # Multi-Hit Projectile Template (WIP)
 ### Created by Mawral
-*Currently in testing. Not recommended for use in your released characters just yet.
+*Currently in testing. Code has yet to be tidied and stress-tested. Not recommended for use in your released characters just yet.
 # Description
 
 This template can be used to create a projectile that hits opponents multiple times.
