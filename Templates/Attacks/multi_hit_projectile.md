@@ -1,6 +1,6 @@
-# Multi-Hit Projectile Template (WIP)
+# Multi-Hit Projectile Template
 ### Created by Mawral
-*Currently in testing. Code has yet to be tidied and stress-tested. Not recommended for use in your released characters just yet.
+
 # Description
 
 This advanced template can be used to create a projectile that hits opponents multiple times.
@@ -43,6 +43,7 @@ set_window_value(AT_NSPECIAL, 3, AG_WINDOW_ANIM_FRAME_START, 2);
 set_num_hitboxes(AT_NSPECIAL, 2);
 
 //define some custom hitbox grid indexes for multihit attacks.
+//*if these indexes overlap with another code example, you can simply renumber them.
 #macro HG_ENABLE_MULTIHIT_PROJECTILE 71
 #macro HG_MULTIHIT_COUNT 72
 #macro HG_MULTIHIT_DELAY 73
