@@ -19,9 +19,6 @@ If you just need a template to copy and paste, look no further:
  
   ```GML
 //attacks/nspecial.gml
-//a minimal 'multihit projectile' attack example. It fires a projectile that hits 5 times, then spawns a second projectile for its final hit. 
-//You can copy-paste this into your project to quickly test this template.
-//attacks/nspecial.gml
 //a minimal 'multihit projectile' attack example. 
 //You can copy-paste this into your project to quickly test this template.
 
@@ -104,7 +101,6 @@ set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25);//amount tha
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_NUM, 2);      //spawn 'final' hitbox #2, after the maximum number of hits.
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_EFFECT, HFX_GEN_BIG); //spawn a big vfx after the max number of hits.
 
-
 //----------------------------------------
 //hitbox 2: 'final hit' projectile hitbox
 //----------------------------------------
@@ -115,8 +111,8 @@ set_hitbox_value(AT_NSPECIAL, 2, HG_WINDOW_CREATION_FRAME, 0);
 set_hitbox_value(AT_NSPECIAL, 2, HG_LIFETIME, 2);
 set_hitbox_value(AT_NSPECIAL, 2, HG_HITBOX_X, 0);
 set_hitbox_value(AT_NSPECIAL, 2, HG_HITBOX_Y, -30);
-set_hitbox_value(AT_NSPECIAL, 2, HG_WIDTH, 64);
-set_hitbox_value(AT_NSPECIAL, 2, HG_HEIGHT, 64);
+set_hitbox_value(AT_NSPECIAL, 2, HG_WIDTH, 70);
+set_hitbox_value(AT_NSPECIAL, 2, HG_HEIGHT, 70);
 set_hitbox_value(AT_NSPECIAL, 2, HG_SHAPE, 0);
 set_hitbox_value(AT_NSPECIAL, 2, HG_PRIORITY, 8); 
 
@@ -272,10 +268,13 @@ proj_old_hsp = 0;
 proj_old_vsp = 0;
 proj_old_img_spd = 0;
 
-//record the 'player' variable. if it changes, this indicates that the projectile has been parried.
+//record the 'player' variable. 
+//if it changes, this indicates that the projectile has been parried.
 proj_old_player = player;
    
-//save a clone of the 'can_hit' array. the update script uses this to detect when a hit has been registered, and resets it to enable the projectile to hit again. 
+//save a clone of the 'can_hit' array. 
+//the update script uses this to detect when a hit has been registered, 
+//and resets it to enable the projectile to hit again. 
 initial_can_hit = array_clone(can_hit); 
 return;
 ```
@@ -306,6 +305,7 @@ if (getting_bashed) {
 //handle hitpause.
 if (proj_hitpause) {
 	proj_hitstop--;
+	hitbox_timer--;
 	if (proj_hitstop <= 0) {
 		//hitpause has ended. reset all of the movement and animation variables.
 		hsp = proj_old_hsp;
@@ -314,30 +314,32 @@ if (proj_hitpause) {
 		proj_hitpause = false;
 		
 		//if this projectile has hit its maximum number of times, destroy it.
-		if (hit_counter >= maximum_number_of_hits) destroyed = true;
+		if (maximum_number_of_hits > 0 && hit_counter >= maximum_number_of_hits) destroyed = true;
 
 	}
 	else {
 		//stop movement and exit here if the projectile is still in hitpause.
 		hsp = 0;
 		vsp = 0;
+		
 		return;
 	}
 }
 
 //if this projectile has no maximum hit cap AND a 'final' hitbox, 
 //spawn it at the end of the projectile's lifetime.
-if (maximum_number_of_hits == 0 && hitbox_timer >= length && destroyed = false) {
+if (maximum_number_of_hits <= 0 && hitbox_timer >= length && destroyed == false) {
 	multihit_spawn_final_hitbox();
 	destroyed = true;
 	return;
 }
 
 //handle multihits. exit here if no multihits are being triggered right now.
-if (array_equals(initial_can_hit, can_hit) && (hit_counter == 0 || maximum_number_of_hits != 0)) return;
-	
+var array_match = array_equals(initial_can_hit, can_hit);
+if !( !array_match || (hit_counter > 0 && maximum_number_of_hits != 0 && !proj_persist)) return;
+	//don't break if array is equal, 
 //even if the projectile hits multiple players, it only enters hitpause once.
-if (!hitpause_inflicted) {
+if (!hitpause_inflicted && !array_match) {
 	//give the projectile hitpause, then exit the script.
 	hitpause_inflicted	= true;
 	proj_hitpause		= true;
@@ -350,7 +352,9 @@ if (!hitpause_inflicted) {
 	img_spd 			= 0;
 	
 	//if necessary, extend the lifetime of the projectile so that all of the hits can land.
-	length = max(length, length - (length - hitbox_timer) + proj_hitstop + time_between_hits);
+	if (maximum_number_of_hits > 0) {
+		length = max(length, length - (length - hitbox_timer) + proj_hitstop + time_between_hits);
+	}
 	
 	return;
 }
@@ -424,27 +428,29 @@ return;
   <summary> hit_player.gml </summary>
 	
 ```GML
-if (my_hitboxID.attack == AT_NSPECIAL && my_hitboxID.hbox_num == 1) multihit_hit_player();
+//hit_player.gml
+//run the multihit_update function for projectiles with multihit enabled.
+if ("proj_is_a_multihit_projectile" in my_hitboxID) multihit_hit_player();
 
+//---
 
 #define multihit_hit_player
 
-//ignore kragg shards.
-if (my_hitboxID.hit_priority == 1) return;
-//ignore if the opponent is not stunned.
+//do nothing here unless the opponent is stunned.
 if (hit_player_obj.state_cat != SC_HITSTUN) return;
 
 //magnet the opponent into the multihit projectile.
-var x_dest = (my_hitboxID.x + 0.5 * my_hitboxID.hsp);
+var x_dest = my_hitboxID.x + my_hitboxID.hsp;
 hit_player_obj.x = round( lerp(hit_player_obj.x, x_dest, my_hitboxID.proj_magnet_strength) );
 
 //magnet along the y axis too if the opponent is not flinching.
 var land_state = hit_player_obj.state == PS_HITSTUN_LAND;
 if (!land_state) {
-    var y_dest = my_hitboxID.y + round(0.5 * (my_hitboxID.vsp + hit_player_obj.char_height));
+    var y_dest = my_hitboxID.y + my_hitboxID.vsp - 0.5 * hit_player_obj.char_height;
     hit_player_obj.y = round( lerp(hit_player_obj.y, y_dest, my_hitboxID.proj_magnet_strength) );
     
-    //if the hitbox has an angle flipper, prevent the opponent from rapidly flipping direction.
+    //if the hitbox has an angle flipper AND has been launched horizontally,
+    //prevent the opponent from rapidly flipping direction.
     if hit_player_obj.hurt_img > 1 return;
 }
 
@@ -452,5 +458,6 @@ if (my_hitboxID.hit_flipper == 9 || (my_hitboxID.hit_flipper == 7 && my_hitboxID
     hit_player_obj.spr_dir = -my_hitboxID.spr_dir;
 }
 return;
+
 ```
 </details>
