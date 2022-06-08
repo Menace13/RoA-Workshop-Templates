@@ -290,67 +290,129 @@ return;
 	
 ```GML
 //hitbox_update.gml
-//define custom hitbox grid indexes for multihit attacks. 
-#macro HG_ENABLE_MULTIHIT_PROJECTILE 71
-#macro HG_MULTIHIT_COUNT 72
-#macro HG_MULTIHIT_DELAY 73
-#macro HG_MULTIHIT_MAGNET_STRENGTH 74
-#macro HG_MULTIHIT_FINAL_HITBOX_NUM 75
-#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 76
-#macro HG_MULTIHIT_PERSISTENT 77
-#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 78
-
-//run the multihit_init function for projectiles with multihit enabled.
-var check_multihit;
-with (player_id) check_multihit = get_hitbox_value(other.attack, other.hbox_num, HG_ENABLE_MULTIHIT_PROJECTILE);
-if (check_multihit) multihit_init();
-
+//run the multihit_update function for projectiles with multihit enabled.
+if ("proj_is_a_multihit_projectile" in self) {
+	multihit_update();
+}
 //---
 
-#define multihit_init
-//multi-hit projectile script by Mawral
-
-//load into variables.
-var atk = attack;
-var num = hbox_num;
-with (player_id) {
-    
-    other.maximum_number_of_hits    = get_hitbox_value(atk, num, HG_MULTIHIT_COUNT); 
-    other.time_between_hits         = get_hitbox_value(atk, num, HG_MULTIHIT_DELAY); 
-    other.final_hit_vfx             = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_EFFECT);
-    other.proj_magnet_strength      = get_hitbox_value(atk, num, HG_MULTIHIT_MAGNET_STRENGTH);  
-    other.proj_persist              = get_hitbox_value(atk, num, HG_MULTIHIT_PERSISTENT);
-    other.proj_speed_cap            = get_hitbox_value(atk, num, HG_MULTIHIT_CAP_SPEED_ON_HIT);
-    
-    var num2                        = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_NUM);
-    other.final_hit_hbox_num = num2;        
-    
-    //find the position to spawn the final hitbox.
-    if (num2 > 0) {
-        other.final_hit_x = get_hitbox_value(atk, num2, HG_HITBOX_X);
-        other.final_hit_y = get_hitbox_value(atk, num2, HG_HITBOX_Y);
-    }
+#define multihit_update
+//projectile multihit script by Mawral.
+//check if ori has bashed this projectile. if so, end the script.
+if (getting_bashed) {
+	return;
 }
 
-//establish multihit variables.
-proj_is_a_multihit_projectile = true;
-hit_counter = 0;
+//handle hitpause.
+if (proj_hitpause) {
+	proj_hitstop--;
+	if (proj_hitstop <= 0) {
+		//hitpause has ended. reset all of the movement and animation variables.
+		hsp = proj_old_hsp;
+		vsp = proj_old_vsp;
+		img_spd = proj_old_img_spd;
+		proj_hitpause = false;
+		
+		//if this projectile has hit its maximum number of times, destroy it.
+		if (hit_counter >= maximum_number_of_hits) destroyed = true;
+
+	}
+	else {
+		//stop movement and exit here if the projectile is still in hitpause.
+		hsp = 0;
+		vsp = 0;
+		return;
+	}
+}
+
+//if this projectile has no maximum hit cap AND a 'final' hitbox, 
+//spawn it at the end of the projectile's lifetime.
+if (maximum_number_of_hits == 0 && hitbox_timer >= length && destroyed = false) {
+	multihit_spawn_final_hitbox();
+	destroyed = true;
+	return;
+}
+
+//handle multihits. exit here if no multihits are being triggered right now.
+if (array_equals(initial_can_hit, can_hit) && (hit_counter == 0 || maximum_number_of_hits != 0)) return;
+	
+//even if the projectile hits multiple players, it only enters hitpause once.
+if (!hitpause_inflicted) {
+	//give the projectile hitpause, then exit the script.
+	hitpause_inflicted	= true;
+	proj_hitpause		= true;
+	proj_hitstop		= hitpause + max(0, -extra_hitpause);
+	proj_old_hsp		= hsp;
+	proj_old_vsp		= vsp;
+	proj_old_img_spd	= img_spd;
+	hsp 				= 0;
+	vsp 				= 0;
+	img_spd 			= 0;
+	
+	//if necessary, extend the lifetime of the projectile so that all of the hits can land.
+	length = max(length, length - (length - hitbox_timer) + proj_hitstop + time_between_hits);
+	
+	return;
+}
+
+//increment the timer for resetting the can_hit array.
+//exit here and wait until time_between_hits has elapsed.
+reset_can_hit_timer++;
+if (reset_can_hit_timer < time_between_hits) return;
+
+//increase the hit counter.
+hit_counter++;
+
+//if this projectile's 'player' has since changed (due to being parried or
+//bashed), update the 'initial' can_hit array.
+if (player != proj_old_player) {
+    proj_old_player = player;
+    initial_can_hit = array_create(20, 1);
+    initial_can_hit[player] = 0;
+}
+
+//reset the can_hit array, allowing the projectile to hit opponents multiple times.
+can_hit = array_clone(initial_can_hit);
+
+//reset variables that detect hits.
 reset_can_hit_timer = 0;
-hitpause_inflicted = 0;
-proj_old_hitpause = hitpause;
+hitpause_inflicted = false;
 
-//establish hitstop and hitpause variables.
-proj_hitstop = 0;
-proj_hitpause = 0;
-proj_old_hsp = 0;
-proj_old_vsp = 0;
-proj_old_img_spd = 0;
+//parrying a projectile increases the base amount of hitpause it inflicts.
+//this can break multihits, so let's fix that by simply overwriting it every reset.
+hitpause = proj_old_hitpause;
 
-//record the 'player' variable. if it changes, this indicates that the projectile has been parried.
-proj_old_player = player;
-   
-//save a clone of the 'can_hit' array. the update script uses this to detect when a hit has been registered, and resets it to enable the projectile to hit again. 
-initial_can_hit = array_clone(can_hit); 
+//reduce this projectile's speed to its maximum cap when it hits something.
+if (proj_speed_cap != 0) {
+	var speed_factor = point_distance(0, 0, hsp, vsp) * proj_speed_cap;
+	if (speed_factor > 1) { hsp /= speed_factor; vsp /= speed_factor; }
+}
+
+//if this is the final hit, and a 'final hitbox' has been specified, 
+//destroy this hitbox and spawn the 'final hitbox'.
+if (maximum_number_of_hits > 0 && hit_counter >= maximum_number_of_hits) {
+	destroyed = true;
+	
+	//spawn a 'final hit' hitbox, if specified.
+	multihit_spawn_final_hitbox();
+}
+
+#define multihit_spawn_final_hitbox
+//exit if there is no hitbox to spawn.
+if (final_hit_hbox_num == 0) return;
+
+//spawn the final hitbox. assign the same 'player' and 'can_hit' values as this hitbox.
+var xx = round(x + spr_dir * final_hit_x + hsp);
+var yy = round(y + final_hit_y + vsp);
+var final_hitbox = create_hitbox(attack, final_hit_hbox_num, xx, yy);
+final_hitbox.spr_dir = spr_dir;
+final_hitbox.player = player;
+final_hitbox.can_hit = array_clone(initial_can_hit);
+
+//create vfx if specified.
+if (final_hit_vfx != 0 && instance_exists(player_id)) {
+	with (player_id) spawn_hit_fx(other.x, other.y, other.final_hit_vfx);
+}
 return;
 ```
 
