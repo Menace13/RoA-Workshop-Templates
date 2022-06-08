@@ -21,7 +21,6 @@ If you just need a template to copy and paste, look no further:
 //attacks/nspecial.gml
 //a minimal 'multihit projectile' attack example. It fires a projectile that hits 5 times, then spawns a second projectile for its final hit. 
 //You can copy-paste this into your project to quickly test this template.
-
 //attacks/nspecial.gml
 //a minimal 'multihit projectile' attack example. 
 //You can copy-paste this into your project to quickly test this template.
@@ -47,15 +46,18 @@ set_window_value(AT_NSPECIAL, 3, AG_WINDOW_ANIM_FRAME_START, 2);
 set_num_hitboxes(AT_NSPECIAL, 2);
 
 //define some custom hitbox grid indexes for multihit attacks.
-#macro HG_MULTIHIT_COUNT 70
-#macro HG_MULTIHIT_DELAY 71
-#macro HG_MULTIHIT_MAGNET_STRENGTH 72
-#macro HG_MULTIHIT_FINAL_HITBOX_NUM 73
-#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 74
-#macro HG_MULTIHIT_PERSISTENT 75
-#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 76
+#macro HG_ENABLE_MULTIHIT_PROJECTILE 71
+#macro HG_MULTIHIT_COUNT 72
+#macro HG_MULTIHIT_DELAY 73
+#macro HG_MULTIHIT_MAGNET_STRENGTH 74
+#macro HG_MULTIHIT_FINAL_HITBOX_NUM 75
+#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 76
+#macro HG_MULTIHIT_PERSISTENT 77
+#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 78
 
-//multi-hit hitbox
+//------------------------------
+//hitbox 1: multi-hit projectile
+//------------------------------
 set_hitbox_value(AT_NSPECIAL, 1, HG_HITBOX_TYPE, 2);
 set_hitbox_value(AT_NSPECIAL, 1, HG_WINDOW, 2);
 set_hitbox_value(AT_NSPECIAL, 1, HG_LIFETIME, 60);
@@ -63,15 +65,17 @@ set_hitbox_value(AT_NSPECIAL, 1, HG_HITBOX_X, 0);
 set_hitbox_value(AT_NSPECIAL, 1, HG_HITBOX_Y, -20);
 set_hitbox_value(AT_NSPECIAL, 1, HG_WIDTH, 48);
 set_hitbox_value(AT_NSPECIAL, 1, HG_HEIGHT, 32);
-set_hitbox_value(AT_NSPECIAL, 1, HG_PRIORITY, 5); //must not be set to '1'.
+set_hitbox_value(AT_NSPECIAL, 1, HG_PRIORITY, 5);
 
 set_hitbox_value(AT_NSPECIAL, 1, HG_DAMAGE, 1);
 set_hitbox_value(AT_NSPECIAL, 1, HG_BASE_HITPAUSE, 3);
 set_hitbox_value(AT_NSPECIAL, 1, HG_EXTRA_HITPAUSE, 0); 
-set_hitbox_value(AT_NSPECIAL, 1, HG_BASE_KNOCKBACK, 5);
+set_hitbox_value(AT_NSPECIAL, 1, HG_BASE_KNOCKBACK, 4);
 set_hitbox_value(AT_NSPECIAL, 1, HG_KNOCKBACK_SCALING, 0);
 set_hitbox_value(AT_NSPECIAL, 1, HG_ANGLE, 45);
-set_hitbox_value(AT_NSPECIAL, 1, HG_ANGLE_FLIPPER, 9); //angle flipper 9 hits the opponent towards the center of the projectile.
+//angle flipper 9 hits the opponent towards the center of the projectile.
+//flipper 7, or no flipper, might work better for some projectiles.
+set_hitbox_value(AT_NSPECIAL, 1, HG_ANGLE_FLIPPER, 9); 
 
 set_hitbox_value(AT_NSPECIAL, 1, HG_HIT_SFX, asset_get("sfx_blow_weak2"));
 set_hitbox_value(AT_NSPECIAL, 1, HG_PROJECTILE_SPRITE, sprite_get("nspecial_proj"));
@@ -80,27 +84,30 @@ set_hitbox_value(AT_NSPECIAL, 1, HG_PROJECTILE_ANIM_SPEED, 0.25);
 set_hitbox_value(AT_NSPECIAL, 1, HG_PROJECTILE_HSPEED, 6); 
 set_hitbox_value(AT_NSPECIAL, 1, HG_PROJECTILE_VSPEED, 0); 
 
-//this grid index is important - the multihit won't work if the projectile is destroyed on player contact.
+//*important* - the multihit won't work if the projectile is destroyed on player contact.
 set_hitbox_value(AT_NSPECIAL, 1, HG_PROJECTILE_ENEMY_BEHAVIOR, 1); 
 //you may or may not want the opponent to be able to tech out of the middle of the multihit.
 set_hitbox_value(AT_NSPECIAL, 1, HG_TECHABLE, 1); 
-//sometimes you may want it to force-flinch instead.
+//sometimes you may want it to force-flinch too. mix and match as needed.
 set_hitbox_value(AT_NSPECIAL, 1, HG_FORCE_FLINCH, 1); 
-//reduced SDI can help lessen the chance of opponents escaping the multihit projectile.
+//reduced SDI lessens the chance of opponents escaping the multihit projectile.
 set_hitbox_value(AT_NSPECIAL, 1, HG_SDI_MULTIPLIER, 0.5);
-//most projectiles have lower hitstun than normal. It's also a good idea for multihits.
+//most projectiles have less hitstun than normal. Also a good idea for multihits.
 set_hitbox_value(AT_NSPECIAL, 1, HG_HITSTUN_MULTIPLIER, 0.75); 
 
 //custom grid indexes for multi-hits.
-set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_COUNT, 5);                 //hit 5 times.
-set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_DELAY, 3);                 //3 frame delay (plus hitpause) between each hit.
-set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25);    //25% 'magnet' strength. adjust based on preference.
+set_hitbox_value(AT_NSPECIAL, 1, HG_ENABLE_MULTIHIT_PROJECTILE, 1); //enable multihits for this projectile.    
+set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_COUNT, 5);             //number of hits.
+set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_DELAY, 3);             //delay time between hits (not including hitpause).
+set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25);//amount that the projectile 'pulls' opponents (range 0-1).
 
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_NUM, 2);      //spawn 'final' hitbox #2, after the maximum number of hits.
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_EFFECT, HFX_GEN_BIG); //spawn a big vfx after the max number of hits.
 
 
-//'final' hitbox.
+//----------------------------------------
+//hitbox 2: 'final hit' projectile hitbox
+//----------------------------------------
 //this is an optional projectile, that spawns after the multihit projectile deals its maximum number of hits.
 set_hitbox_value(AT_NSPECIAL, 2, HG_HITBOX_TYPE, 2);
 set_hitbox_value(AT_NSPECIAL, 2, HG_WINDOW, 99); //this hitbox will never spawn naturally; it will only spawn at the end of the multi-hit projectile. 
@@ -140,45 +147,47 @@ For a more explained walkthrough of how to add multihits to your projectile code
 
 ## Set up a normal Projectile attack
 
-Set up an attack like normal, with a single projectile hitbox. The only requirements for this hitbox are that `HG_PROJECTILE_ENEMY_BEHAVIOR` is set to `1` (so that the projectile does not disappear when hitting a player once), and that `HG_PRIORITY` is larger than 1 (to avoid any code interactions with Kragg rock shards). It is also recommended to give the attack a lower `HG_SDI_MULTIPLIER` and `HG_HITSTUN_MULTIPLIER`.
+Set up an attack like normal, with a single projectile hitbox. The only requirements for this hitbox are that `HG_PROJECTILE_ENEMY_BEHAVIOR` is set to `1` (so that the projectile does not disappear when hitting a player once). It is also recommended to give the attack a lower `HG_SDI_MULTIPLIER` and `HG_HITSTUN_MULTIPLIER`, and set `HG_TECHABLE` to `1` (untechable) if the multi-hit should be inescapable.
 
 ## Define 'custom' Grid Indexes
 This template uses 'custom-made' Grid Indexes for easy editing. Add the following indexes to your attack script.
 
  ```GML
 //attacks/nspecial.gml
-#macro HG_MULTIHIT_COUNT 70
-#macro HG_MULTIHIT_DELAY 71
-#macro HG_MULTIHIT_MAGNET_STRENGTH 72
-#macro HG_MULTIHIT_FINAL_HITBOX_NUM 73
-#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 74
-#macro HG_MULTIHIT_PERSISTENT 75
-#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 76
+#macro HG_ENABLE_MULTIHIT_PROJECTILE 71
+#macro HG_MULTIHIT_COUNT 72
+#macro HG_MULTIHIT_DELAY 73
+#macro HG_MULTIHIT_MAGNET_STRENGTH 74
+#macro HG_MULTIHIT_FINAL_HITBOX_NUM 75
+#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 76
+#macro HG_MULTIHIT_PERSISTENT 77
+#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 78
 ```
 The values in these Grid Indexes will be accessed in `hitbox_init.gml` and `hitbox_update.gml` to make the multi-hit function.
 
-## Define 'custom' Grid Indexes
+## Add The Necessary Grid Indexes to your Projectile
 This template requires two custom grid indexes to be set. Add these to your hitbox.
+`HG_ENABLE_MULTIHIT_PROJECTILE` enables the projectile to use this template's multihits. Simply set it to `1`.
 `HG_MULTIHIT_COUNT` defines the number of times the projectile will hit. If set to zero, the projectile will hit repeatedly until its Lifetime ends.
 `HG_MULTIHIT_DELAY` defines the amount of time (in frames) between each hit. This number is *in addition* to the amount of Hitpause the projectile has. I recommend setting both `HG_HITPAUSE` and `HG_MULTIHIT_DELAY` to a small value.
 
 ```GML
 //attacks/nspecial.gml
 //for example
+set_hitbox_value(AT_NSPECIAL, 1, HG_ENABLE_MULTIHIT_PROJECTILE, 1); 
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_COUNT, 5); 
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_DELAY, 3); 
-set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25); 
 ```
 
-## Optional: Add a second, 'final' hitbox
+## Optional: Add a Second, 'Final' Projectile Hitbox
 If desired, this template supports having a second hitbox spawn after the multi-hit projectile hits a maximum number of times. You can use this to make a projectile that has a series of weak, repeating hits, leading into a much stronger projectile hit at the end.
 
-Add a second projectile hitbox to your attack. Then, have your first hitbox refer to it using the custom grid index `HG_MULTIHIT_FINAL_HITBOX_NUM`.
+Create a second projectile hitbox for your attack in the normal way. Set its `HG_WINDOW` to a large number so that it won't spawn naturally. Then, have your first hitbox refer to it using the custom grid index `HG_MULTIHIT_FINAL_HITBOX_NUM`.
 You can also have a Visual Effect spawn at the same time as the 'final' hitbox. Specify it using `HG_MULTIHIT_FINAL_HITBOX_EFFECT` if desired.
 ```GML
 //attacks/nspecial.gml
 //for example
-set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_NUM, 2); 
+set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_NUM, 2); //this tells hitbox #1 to spawn hitbox #2 at the end.
 set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_FINAL_HITBOX_EFFECT, HFX_GEN_BIG); 
 ```
 ## Optional: Use the remaining Grid Indexes
@@ -198,48 +207,59 @@ set_hitbox_value(AT_NSPECIAL, 1, HG_MULTIHIT_MAGNET_STRENGTH, 0.25);
 
 
 # Scripts
-
-## `hitbox_init.gml` - 'Initialize Multi-Hit Variables'
-Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example. If the character has several multi-hit projectiles, just copy the line of code for each attack index.
+The following code doesn't require any editing - Simply copy and paste into your character.
 Functions using the `#define` keyword must be placed at the bottom of the .gml file.
 
+## `hitbox_init.gml` - 'Initialize Multi-Hit Variables'
 <details>
   <summary>hitbox_init.gml</summary>
 	
 ```GML
 //hitbox_init.gml
-if (attack == AT_NSPECIAL && hbox_num == 1) multihit_init_script();
-
-
-#define multihit_init_script
-//multi-hit projectile script by Mawral
-
-//ignore kragg rock shards.
-if (hit_priority == 1) return; 
-
 //define custom hitbox grid indexes for multihit attacks. 
-#macro HG_MULTIHIT_COUNT 70
-#macro HG_MULTIHIT_DELAY 71
-#macro HG_MULTIHIT_MAGNET_STRENGTH 72
-#macro HG_MULTIHIT_FINAL_HITBOX_NUM 73
-#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 74
-#macro HG_MULTIHIT_PERSISTENT 75
-#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 76
+#macro HG_ENABLE_MULTIHIT_PROJECTILE 71
+#macro HG_MULTIHIT_COUNT 72
+#macro HG_MULTIHIT_DELAY 73
+#macro HG_MULTIHIT_MAGNET_STRENGTH 74
+#macro HG_MULTIHIT_FINAL_HITBOX_NUM 75
+#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 76
+#macro HG_MULTIHIT_PERSISTENT 77
+#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 78
+
+//run the multihit_init function for projectiles with multihit enabled.
+var check_multihit;
+with (player_id) check_multihit = get_hitbox_value(other.attack, other.hbox_num, HG_ENABLE_MULTIHIT_PROJECTILE);
+if (check_multihit) multihit_init();
+
+//---
+
+#define multihit_init
+//multi-hit projectile script by Mawral
 
 //load into variables.
 var atk = attack;
 var num = hbox_num;
 with (player_id) {
+    
+    other.maximum_number_of_hits    = get_hitbox_value(atk, num, HG_MULTIHIT_COUNT); 
     other.time_between_hits         = get_hitbox_value(atk, num, HG_MULTIHIT_DELAY); 
-    other.final_hit_hbox_num        = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_NUM);
     other.final_hit_vfx             = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_EFFECT);
     other.proj_magnet_strength      = get_hitbox_value(atk, num, HG_MULTIHIT_MAGNET_STRENGTH);  
-    other.maximum_number_of_hits    = get_hitbox_value(atk, num, HG_MULTIHIT_COUNT); 
     other.proj_persist              = get_hitbox_value(atk, num, HG_MULTIHIT_PERSISTENT);
     other.proj_speed_cap            = get_hitbox_value(atk, num, HG_MULTIHIT_CAP_SPEED_ON_HIT);
+    
+    var num2                        = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_NUM);
+    other.final_hit_hbox_num = num2;        
+    
+    //find the position to spawn the final hitbox.
+    if (num2 > 0) {
+        other.final_hit_x = get_hitbox_value(atk, num2, HG_HITBOX_X);
+        other.final_hit_y = get_hitbox_value(atk, num2, HG_HITBOX_Y);
+    }
 }
 
 //establish multihit variables.
+proj_is_a_multihit_projectile = true;
 hit_counter = 0;
 reset_can_hit_timer = 0;
 hitpause_inflicted = 0;
@@ -251,7 +271,6 @@ proj_hitpause = 0;
 proj_old_hsp = 0;
 proj_old_vsp = 0;
 proj_old_img_spd = 0;
-
 
 //record the 'player' variable. if it changes, this indicates that the projectile has been parried.
 proj_old_player = player;
@@ -265,120 +284,79 @@ return;
 
 
 ## `hitbox_update.gml` - Multi-Hit Logic
-Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example.
 
 <details>
   <summary> hitbox_update.gml </summary>
 	
 ```GML
 //hitbox_update.gml
-if (attack == AT_NSPECIAL && hbox_num == 1) multihit_update_script();
+//define custom hitbox grid indexes for multihit attacks. 
+#macro HG_ENABLE_MULTIHIT_PROJECTILE 71
+#macro HG_MULTIHIT_COUNT 72
+#macro HG_MULTIHIT_DELAY 73
+#macro HG_MULTIHIT_MAGNET_STRENGTH 74
+#macro HG_MULTIHIT_FINAL_HITBOX_NUM 75
+#macro HG_MULTIHIT_FINAL_HITBOX_EFFECT 76
+#macro HG_MULTIHIT_PERSISTENT 77
+#macro HG_MULTIHIT_CAP_SPEED_ON_HIT 78
 
-#define multihit_update_script
-//projectile multihit script by Mawral.
+//run the multihit_init function for projectiles with multihit enabled.
+var check_multihit;
+with (player_id) check_multihit = get_hitbox_value(other.attack, other.hbox_num, HG_ENABLE_MULTIHIT_PROJECTILE);
+if (check_multihit) multihit_init();
 
-//ignore kragg rock shards.
-if (hit_priority == 1) return; 
+//---
 
-//check if Ori has bashed this projectile. if so, end the script.
-if (getting_bashed) return;
+#define multihit_init
+//multi-hit projectile script by Mawral
 
-//handle hitpause.
-if (proj_hitpause) {
-	proj_hitstop--;
-	if (proj_hitstop <= 0) {
-		//hitpause has ended. reset all of the movement and animation variables.
-		hsp = proj_old_hsp;
-		vsp = proj_old_vsp;
-		img_spd = proj_old_img_spd;
-		proj_hitpause = false;
-		
-		//if this projectile has hit its maximum number of times, destroy it.
-		if (hit_counter >= maximum_number_of_hits) destroyed = true;
-
-	}
-	else {
-		//stop movement and exit here if the projectile is still in hitpause.
-		hsp = 0;
-		vsp = 0;
-		return;
-	}
+//load into variables.
+var atk = attack;
+var num = hbox_num;
+with (player_id) {
+    
+    other.maximum_number_of_hits    = get_hitbox_value(atk, num, HG_MULTIHIT_COUNT); 
+    other.time_between_hits         = get_hitbox_value(atk, num, HG_MULTIHIT_DELAY); 
+    other.final_hit_vfx             = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_EFFECT);
+    other.proj_magnet_strength      = get_hitbox_value(atk, num, HG_MULTIHIT_MAGNET_STRENGTH);  
+    other.proj_persist              = get_hitbox_value(atk, num, HG_MULTIHIT_PERSISTENT);
+    other.proj_speed_cap            = get_hitbox_value(atk, num, HG_MULTIHIT_CAP_SPEED_ON_HIT);
+    
+    var num2                        = get_hitbox_value(atk, num, HG_MULTIHIT_FINAL_HITBOX_NUM);
+    other.final_hit_hbox_num = num2;        
+    
+    //find the position to spawn the final hitbox.
+    if (num2 > 0) {
+        other.final_hit_x = get_hitbox_value(atk, num2, HG_HITBOX_X);
+        other.final_hit_y = get_hitbox_value(atk, num2, HG_HITBOX_Y);
+    }
 }
 
-//handle multihits.
-if (!array_equals(initial_can_hit, can_hit) || (maximum_number_of_hits == 0 && hit_counter > 0)) {
-	
-	//even if the projectile hits multiple players, it only enters hitpause once.
-	if (!hitpause_inflicted) {
-		//give the projectile hitpause, then exit the script.
-		hitpause_inflicted	= true;
-		proj_hitpause		= true;
-		proj_hitstop		= hitpause + max(0, -extra_hitpause);
-		proj_old_hsp		= hsp;
-		proj_old_vsp		= vsp;
-		proj_old_img_spd	= img_spd;
-		hsp 				= 0;
-		vsp 				= 0;
-		img_spd 			= 0;
-		
-		//if necessary, extend the lifetime of the projectile so that all of the hits can land.
-		length = max(length, length - (length - hitbox_timer) + proj_hitstop + time_between_hits);
-		
-		return;
-	}
-	
-	reset_can_hit_timer++;
-	if (reset_can_hit_timer >= time_between_hits) {
-		//increase the hit counter.
-		hit_counter++;
-		
-		//if this projectile's 'player' has since changed (due to being parried or bashed), update the 'initial' can_hit array.
-		if (player != proj_old_player) {
-		    proj_old_player = player;
-		    initial_can_hit = array_create(20, 1);
-		    initial_can_hit[player] = 0;
-		}
-		
-		//reset the can_hit array, allowing the projectile to hit opponents multiple times.
-		can_hit = array_clone(initial_can_hit);
-		
-		//reset variables that detect hits.
-		reset_can_hit_timer = 0;
-		hitpause_inflicted = false;
-		
-		//parrying a projectile increases the amount of hitpause it inflicts... which is bad for multihits that need to be consistent.
-		//fix that by simply overwriting it every reset.
-		hitpause = proj_old_hitpause;
-		
-		//reduce this projectile's speed to its maximum cap when it hits something.
-		if (proj_speed_cap != 0) {
-			var speed_factor = point_distance(0, 0, hsp, vsp) * proj_speed_cap;
-			if (speed_factor > 1) {
-				hsp /= speed_factor;
-				vsp /= speed_factor;
-			}
-		}
-		
-		//if this is the final hit, and a 'final hitbox' has been specified, destroy this hitbox and spawn the 'final hitbox'.
-		if (maximum_number_of_hits > 0 && hit_counter >= maximum_number_of_hits) {
-			destroyed = true;
-			
-			//spawn a 'final hit' hitbox, if specified.
-			if (final_hit_hbox_num == 0) return;
-			var final_hitbox = create_hitbox(attack, final_hit_hbox_num, x, y).spr_dir = spr_dir;
-			final_hitbox.player = player;
-			final_hitbox.can_hit = array_clone(initial_can_hit);
-			if (final_hit_vfx != 0 && instance_exists(player_id)) with (player_id) spawn_hit_fx(other.x, other.y, other.final_hit_vfx);
-			return;
-		}
-	}
-}
+//establish multihit variables.
+proj_is_a_multihit_projectile = true;
+hit_counter = 0;
+reset_can_hit_timer = 0;
+hitpause_inflicted = 0;
+proj_old_hitpause = hitpause;
+
+//establish hitstop and hitpause variables.
+proj_hitstop = 0;
+proj_hitpause = 0;
+proj_old_hsp = 0;
+proj_old_vsp = 0;
+proj_old_img_spd = 0;
+
+//record the 'player' variable. if it changes, this indicates that the projectile has been parried.
+proj_old_player = player;
+   
+//save a clone of the 'can_hit' array. the update script uses this to detect when a hit has been registered, and resets it to enable the projectile to hit again. 
+initial_can_hit = array_clone(can_hit); 
+return;
 ```
 
 </details>
 
 ## `hit_player.gml` - 'Magnet' Code and Visual Fixes
-Optional, but recommended. Edit the attack index in the top line of code if necessary - `AT_NSPECIAL` is used as an example.
 
 <details>
   <summary> hit_player.gml </summary>
