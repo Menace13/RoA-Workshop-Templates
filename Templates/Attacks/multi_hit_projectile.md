@@ -3,14 +3,16 @@
 *Currently in testing. Code has yet to be tidied and stress-tested. Not recommended for use in your released characters just yet.
 # Description
 
-This template can be used to create a projectile that hits opponents multiple times.
+This advanced template can be used to create a projectile that hits opponents multiple times.
 
-In this example, `AT_NSPECIAL` is used for the projectile attack, but it can be changed to any other attack index.
+This template uses zero articles, is Parry-safe and Bash-safe, and can be customized from just the attack's grid-indexes file.
+
+In this template, `AT_NSPECIAL` is used for the projectile attack, but it can be changed to any other attack index.
 
 
 # Creating the Projectile attack
 
-If you just want a template to copy and paste, look no further.
+If you just need a template to copy and paste, look no further:
 
 <details>
   <summary>Example 'Multihit Projectile' example attack - nspecial.gml</summary>
@@ -394,13 +396,13 @@ if (hit_player_obj.state_cat != SC_HITSTUN) return;
 
 //magnet the opponent into the multihit projectile.
 var x_dest = (my_hitboxID.x + 0.5 * my_hitboxID.hsp);
-hit_player_obj.x += round((x_dest - hit_player_obj.x) * my_hitboxID.proj_magnet_strength);
+hit_player_obj.x = round( lerp(hit_player_obj.x, x_dest, my_hitboxID.proj_magnet_strength) );
 
 //magnet along the y axis too if the opponent is not flinching.
 var land_state = hit_player_obj.state == PS_HITSTUN_LAND;
 if (!land_state) {
     var y_dest = my_hitboxID.y + round(0.5 * (my_hitboxID.vsp + hit_player_obj.char_height));
-    hit_player_obj.y += round((y_dest - hit_player_obj.y) * my_hitboxID.proj_magnet_strength);
+    hit_player_obj.y += round( lerp(hit_player_obj.y, y_dest, my_hitboxID.proj_magnet_strength);
     
     //if the hitbox has an angle flipper, prevent the opponent from rapidly flipping direction.
     if hit_player_obj.hurt_img > 1 return;
