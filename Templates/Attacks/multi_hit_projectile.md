@@ -402,7 +402,7 @@ hit_player_obj.x = round( lerp(hit_player_obj.x, x_dest, my_hitboxID.proj_magnet
 var land_state = hit_player_obj.state == PS_HITSTUN_LAND;
 if (!land_state) {
     var y_dest = my_hitboxID.y + round(0.5 * (my_hitboxID.vsp + hit_player_obj.char_height));
-    hit_player_obj.y += round( lerp(hit_player_obj.y, y_dest, my_hitboxID.proj_magnet_strength);
+    hit_player_obj.y = round( lerp(hit_player_obj.y, y_dest, my_hitboxID.proj_magnet_strength) );
     
     //if the hitbox has an angle flipper, prevent the opponent from rapidly flipping direction.
     if hit_player_obj.hurt_img > 1 return;
