@@ -12,6 +12,7 @@ A repository for .GML code templates as examples for people to use for their own
 - - - [Consume Burn (Zetter Strong)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_consume.md)
 - - - [Double Up Special (with Orcahop)](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/double_up_special.md)
 - - - [Inflict Burn](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/burn_inflict.md)
+- - - [Multi-Hit Projectile](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/multi_hit_projectile.md)
 - - - [Short Endlag on Hit](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/short_endlag_on_hit.md)
 - - - [True Teleport](https://github.com/Menace13/RoA-Workshop-Templates/blob/master/Templates/Attacks/true_teleportation.md)
 - - Gimmicks
