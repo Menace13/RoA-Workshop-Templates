@@ -1,0 +1,43 @@
+//Negative edge example
+
+//init.gml
+fspecial_negative_edge = false;
+fspecial_negative_edge_timer_set = 300;
+fspecial_negative_edge_timer = 0;
+fspecial_negative_edge_done = false;
+
+//update.gml
+if (fspecial_negative_edge)
+{
+    if (fspecial_negative_edge_timer == 0 or fspecial_negative_edge_done or state == PS_DEAD or state == PS_RESPAWN){
+        fspecial_negative_edge = false; 
+        fspecial_negative_edge_done = false;
+        fspecial_negative_edge_timer = 0;
+    } 
+    else
+    {
+        fspecial_negative_edge_timer --; 
+    }
+}    
+
+if (!special_down and fspecial_negative_edge and !fspecial_negative_edge_done){
+    create_hitbox( AT_FSPECIAL, 1, x, y - 20 );
+    fspecial_negative_edge_done = true;
+}
+
+//attack_update.gml
+if (attack == AT_FSPECIAL){
+    if (window == 1 and special_down){
+        fspecial_negative_edge = true;
+        fspecial_negative_edge_timer = fspecial_negative_edge_timer_set;
+    }
+    can_fast_fall = false;
+    if (window == 3 and window_timer == 1){
+         move_cooldown[AT_FSPECIAL] = 30; 
+    }
+    if (!special_down){
+        fspecial_negative_edge = false; 
+        fspecial_negative_edge_done = false; 
+        fspecial_negative_edge_timer = 0;
+    }
+}
